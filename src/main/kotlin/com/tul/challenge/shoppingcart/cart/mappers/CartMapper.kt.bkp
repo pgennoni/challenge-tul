@@ -1,0 +1,28 @@
+package com.tul.challenge.shoppingcart.cart.mappers
+
+import com.tul.challenge.shoppingcart.cart.controller.CartResponseDTO
+import com.tul.challenge.shoppingcart.cart.domain.Cart
+import com.tul.challenge.shoppingcart.cart.entities.CartEntity
+import com.tul.challenge.shoppingcart.products.controller.Product
+import java.util.*
+
+object CartMapper: Mapper<Cart, CartEntity> {
+    override fun fromEntity(entity: CartEntity):Cart {
+
+        val products: MutableList<Product> = ArrayList()
+        entity.cartProducts.forEach {  products.add(ProductMapper.fromEntity(it.product)) }
+        return Cart(
+                UUID.fromString(entity.id),
+                entity.state,
+                products
+        )
+    }
+
+    override fun toEntity(domain: Cart): CartEntity {
+        return CartEntity(
+                domain.id.toString(),
+                domain.state
+        )
+    }
+
+}
